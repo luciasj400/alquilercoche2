@@ -29,8 +29,9 @@ class Menu {
         stdout.writeln('Bienvenido');
         break;
       case 4:
-        await loginUsuario();
+        Usuario usuario = await loginUsuario();
         stdout.writeln('Bienvenido a la app');
+        otroMenu(usuario);
         break;
     }
   }
@@ -65,7 +66,7 @@ class Menu {
     if (resultado == false) {
       stdout.writeln('Tu nombre de usuario o contraseña son incorrectos');
     } else{
-      otroMenu(resultado);
+      return resultado;
     }
   }
   

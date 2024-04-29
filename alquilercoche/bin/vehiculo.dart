@@ -15,5 +15,12 @@ Vehiculo();
     this.capacidad = map ['capacidad'];
 }
 
+all(){
+
+}
+
+insertarCoche(){
+  
+}
 
 }
