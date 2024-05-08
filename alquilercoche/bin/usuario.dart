@@ -6,6 +6,7 @@ class Usuario {
 String? nombre;
 int? idusuario;
 String? password;
+int? idvehiculo;
 
 
 Usuario();
@@ -14,6 +15,7 @@ Usuario();
     this.idusuario = map['idusuario'];
     this.nombre = map['nombre'];
     this.password = map ['password'];
+    this.idusuario = map ['idvehiculo'];
 }
 
 

@@ -39,7 +39,9 @@ class Database {
      await conn.query('''CREATE TABLE IF NOT EXISTS usuarios(
       idusuario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
       nombre VARCHAR(50) NOT NULL UNIQUE,
-      password VARCHAR(10) NOT NULL
+      password VARCHAR(10) NOT NULL,
+      idvehiculo INT NULL,
+      FOREIGN KEY (idvehiculo) REFERENCES vehiculos(idvehiculo)
     )''');
     print ('Tabla usuarios creada');
 
@@ -59,7 +61,6 @@ class Database {
      await conn.query('''CREATE TABLE IF NOT EXISTS vehiculos(
       idvehiculo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
       nombre VARCHAR(50) NOT NULL UNIQUE,
-      fechaAlquiler VARCHAR (50) NOT NULL,
       capacidad INT NOT NULL
     )''');
     print ('Tabla vehiculo creada');

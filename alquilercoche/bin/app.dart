@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:test/test.dart';
+
 import 'administrador.dart';
 import 'usuario.dart';
 import 'vehiculo.dart';
@@ -25,13 +27,14 @@ class Menu {
         crearUsuario();
         break;
       case 3:
-        await loginAdministrador();
+        Administrador administrador = await loginAdministrador();
         stdout.writeln('Bienvenido');
+        menuAdministrador(administrador);
         break;
       case 4:
         Usuario usuario = await loginUsuario();
         stdout.writeln('Bienvenido a la app');
-        otroMenu(usuario);
+        MenuUsuario(usuario);
         break;
     }
   }
@@ -41,18 +44,43 @@ class Menu {
   }
 
   bool _resultadoNoValido ( var opcion) => opcion == null || opcion!= 1 && opcion!= 2 && opcion!=3 && opcion!=4;
- 
+  bool _resultadonoValido ( var opcion) => opcion == null || opcion!= 1 && opcion!= 2;
 
-  otroMenu(Usuario usuario) async{
+  menuAdministrador( Administrador administrador) async{
+    int? opcion;
+    do{
+      stdout.writeln('''Elige una opcion
+       1-Insertar Coches
+       2-Ver Coches 
+       ''');
+      String respuesta = stdin.readLineSync() ?? "E";
+      opcion = parsearOpcion(respuesta);
+    } while (_resultadonoValido (opcion));
+    switch (opcion) {
+      case 1:
+      crearVehiculo();
+      break;
+      case 2:
+      //listar los coches
+    }
+  }
+
+
+  MenuUsuario (Usuario usuario) async{
     int? opcion;
     String? nombre = usuario.nombre;
     stdout.writeln('Hola, $nombre.');
     do {
-      stdout.writeln('¿Que coche necesitas alquilar?');
+      stdout.writeln('¿Que coches escoges de estos?');
+      await listarVehiculo();
       String respuesta = stdin.readLineSync() ?? 'E';
       opcion = int.tryParse(respuesta);
     } while (opcion == null);
-      
+      Vehiculo vehiculo = Vehiculo();
+      vehiculo = await vehiculo.getVehiculo(opcion);
+      escogerVehiculo(vehiculo);
+
+
   }
 
   loginUsuario() async {
@@ -69,6 +97,9 @@ class Menu {
       return resultado;
     }
   }
+   escogerVehiculo(vehiculo)async{
+    stdout.writeln("el coche elegido es ${vehiculo.idvehiculo} y el modelo es ${vehiculo.nombre}");
+  }
   
   loginAdministrador() async{
     Administrador administrador = new Administrador();
@@ -80,7 +111,7 @@ class Menu {
 
     if (resultado == false) {
       stdout.writeln('Tu nombre de usuario o contraseña son incorrectos');
-    }
+    } else return resultado;
   }
 
   crearUsuario() {
@@ -101,5 +132,21 @@ class Menu {
     administrador.insertarAdministrador();
   }
 
+  crearVehiculo() {
+    Vehiculo vehiculo = new Vehiculo();
+    stdout.writeln('Introduce un coche');
+    vehiculo.nombre = stdin.readLineSync();
+    stdout.writeln('Introduce la capacidad de ese coche');
+    vehiculo.capacidad = int.tryParse(stdin.readLineSync() ?? 'e') ?? 0;
+    vehiculo.insertarCoche();
+  }
+
+  listarVehiculo() async{
+    List<Vehiculo> listadoVehiculos = await Vehiculo().all();
+    for (Vehiculo elemento in listadoVehiculos){
+      stdout.writeln("${elemento.idvehiculo} - ${elemento.nombre} - ${elemento.capacidad}");
+    }
+    return listadoVehiculos;
+  }
 
 }
